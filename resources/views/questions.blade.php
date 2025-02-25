@@ -12,7 +12,8 @@
             <td>user_id</td>
             <td>title</td>
             <td>content</td>
-            <td>isSolved</td>
+            <td>is_solved</td>
+            <td>Actions</td>
         </thead>
     @foreach($questions as $question)
         <tr>
@@ -20,7 +21,11 @@
             <td>{{$question->user_id}}</td>
             <td>{{$question->title}}</td>
             <td>{{$question->content}}</td>
-            <td>{{$question->isSolved}}</td>
+            <td>{{$question->is_solved}}</td>
+            <td>
+                <a href="{{url('question/destroy/'.$question->id)}}">Удалить</a>
+                <a href="{{url('question/edit/'.$question->id)}}">Редактировать</a>
+            </td>
         </tr>
     @endforeach
 

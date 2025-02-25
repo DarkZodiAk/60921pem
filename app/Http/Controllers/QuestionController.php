@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -22,7 +23,9 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('question_create', [
+            'users' => User::all()
+        ]);
     }
 
     /**
@@ -30,7 +33,14 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|integer',
+            'title' => 'required|string',
+            'content' => 'string'
+        ]);
+        $question = new Question($validated);
+        $question->save();
+        return redirect('/question');
     }
 
     /**
@@ -48,7 +58,10 @@ class QuestionController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('question_edit', [
+            'question' => Question::all()->where('id', $id)->first(),
+            'users' => User::all()
+        ]);
     }
 
     /**
@@ -56,7 +69,17 @@ class QuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|integer',
+            'title' => 'required|string',
+            'content' => 'required'
+        ]);
+        $question = Question::all()->where('id', $id)->first();
+        $question->user_id = $validated['user_id'];
+        $question->title = $validated['title'];
+        $question->content = $validated['content'];
+        $question->save();
+        return redirect('/question');
     }
 
     /**
@@ -64,6 +87,7 @@ class QuestionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Question::destroy($id);
+        return redirect('/question');
     }
 }
