@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class QuestionController extends Controller
 {
@@ -59,6 +60,11 @@ class QuestionController extends Controller
      */
     public function edit(string $id)
     {
+        if(!Gate::allows('edit-question', Question::all()->where('id', $id)->first())) {
+            return redirect('/error')->with('message',
+                'У вас нет разрешения на редактирование вопроса с ID ' . $id);
+        }
+
         return view('question_edit', [
             'question' => Question::all()->where('id', $id)->first(),
             'users' => User::all()
@@ -88,6 +94,11 @@ class QuestionController extends Controller
      */
     public function destroy(string $id)
     {
+        if(!Gate::allows('delete-question', Question::all()->where('id', $id)->first())) {
+            return redirect('/error')->with('message',
+                'У вас нет разрешения на удаление вопроса с ID ' . $id);
+        }
+
         Question::destroy($id);
         return redirect('/question');
     }
