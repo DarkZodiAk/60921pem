@@ -11,10 +11,11 @@ class QuestionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $perpage = $request->perpage ?? 2;
         return view('questions', [
-            'questions' => Question::all()
+            'questions' => Question::paginate($perpage)->withQueryString(),
         ]);
     }
 

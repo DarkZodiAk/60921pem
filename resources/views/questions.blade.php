@@ -28,7 +28,7 @@
             </td>
         </tr>
     @endforeach
-
     </table>
+    {{ $questions->links() }}
 </body>
 </html>
