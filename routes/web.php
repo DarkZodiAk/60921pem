@@ -28,7 +28,6 @@ Route::get('/question/destroy/{id}', [QuestionController::class, 'destroy'])->mi
 Route::get('/tag', [TagController::class, 'index']);
 Route::get('/tag/{id}', [TagController::class, 'show']);
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/auth', [LoginController::class, 'authenticate'])->name('auth');
 
