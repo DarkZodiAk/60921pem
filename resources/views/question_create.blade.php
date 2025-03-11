@@ -2,7 +2,7 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-4">
-    <form method="post" action="{{ url('item') }}">
+    <form method="post" action="{{ url('question') }}">
         @csrf
         <div class="mb-3">
             <label for="title" class="form-label">Заголовок</label>
@@ -17,8 +17,8 @@
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">Описание</label>
-            <input type="text" class="form-control @error('content') is-invalid @enderror"
-                   id="content" name="content" aria-describedby="contentHelp" value="{{ old('content') }}">
+            <textarea class="form-control @error('content') is-invalid @enderror"
+                      id="content" name="content" aria-describedby="contentHelp">{{ old('content') }}</textarea>
             <div id="contentHelp" class="form-text">Опишите вопрос подробнее</div>
             @error('content')
             <div class="invalid-feedback">

@@ -102,6 +102,8 @@ class QuestionController extends Controller
         }
 
         Question::destroy($id);
-        return redirect('/question');
+        return redirect('/question')->withErrors([
+            'success' => 'Вопрос с ID ' . $id . ' был успешно удален'
+        ]);
     }
 }

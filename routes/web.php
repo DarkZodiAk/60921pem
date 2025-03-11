@@ -28,6 +28,11 @@ Route::get('/question/destroy/{id}', [QuestionController::class, 'destroy'])->mi
 Route::get('/tag', [TagController::class, 'index']);
 Route::get('/tag/{id}', [TagController::class, 'show']);
 
+Route::get('login', function () {
+    return redirect('/question')->withErrors([
+        'error' => 'Войдите в систему для совершения данного действия'
+    ]);
+})->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/auth', [LoginController::class, 'authenticate'])->name('auth');
 
