@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuestionControllerApi;
 use App\Http\Controllers\TagControllerApi;
-use App\Http\Controllers\UserControllerApi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +17,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
+
 Route::get('/question', [QuestionControllerApi::class, 'index']);
 Route::get('/question/{id}', [QuestionControllerApi::class, 'show']);
-Route::get('/tag', [TagControllerApi::class, 'index']);
+
+//Route::get('/tag', [TagControllerApi::class, 'index']);
+Route::middleware('auth:sanctum')->get('/tag', [TagControllerApi::class, 'index']);
 Route::get('/tag/{id}', [TagControllerApi::class, 'show']);
-Route::get('user', [UserControllerApi::class, 'index']);
-Route::get('user/{id}', [UserControllerApi::class, 'show']);
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
+
+Route::group(['middleware' => ['auth:sanctum']],  function (){
+    Route::get('/tag', [TagControllerApi::class, 'index']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::get('/logout', [AuthController::class, 'logout']);
+});
