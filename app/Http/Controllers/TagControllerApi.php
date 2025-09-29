@@ -12,7 +12,14 @@ class TagControllerApi extends Controller
      */
     public function index()
     {
-        return response(Tag::all());
+        $perpage = $request->perpage ?? 5;
+        $page = $request->page ?? 0;
+        return response(Tag::limit($perpage)->offset($perpage * $page)->get());
+    }
+
+    public function total()
+    {
+        return response(Tag::all()->count());
     }
 
     /**

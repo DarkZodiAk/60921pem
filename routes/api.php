@@ -18,20 +18,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
 
 Route::get('/question', [QuestionControllerApi::class, 'index']);
 Route::get('/question/{id}', [QuestionControllerApi::class, 'show']);
+Route::get('/questions_total', [QuestionControllerApi::class, 'total']);
 
-//Route::get('/tag', [TagControllerApi::class, 'index']);
-Route::middleware('auth:sanctum')->get('/tag', [TagControllerApi::class, 'index']);
 Route::get('/tag/{id}', [TagControllerApi::class, 'show']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
+Route::get('/tags_total', [TagControllerApi::class, 'total']);
 
 Route::group(['middleware' => ['auth:sanctum']],  function (){
     Route::get('/tag', [TagControllerApi::class, 'index']);

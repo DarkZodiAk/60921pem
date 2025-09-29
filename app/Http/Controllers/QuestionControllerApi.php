@@ -10,9 +10,16 @@ class QuestionControllerApi extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response(Question::all());
+        $perpage = $request->perpage ?? 5;
+        $page = $request->page ?? 0;
+        return response(Question::limit($perpage)->offset($perpage * $page)->get());
+    }
+
+    public function total()
+    {
+        return response(Question::all()->count());
     }
 
     /**
