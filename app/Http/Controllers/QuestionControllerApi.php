@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use Exception;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionControllerApi extends Controller
 {
@@ -27,7 +30,43 @@ class QuestionControllerApi extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'content' => 'string',
+            'image' => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        $fileUrl = "";
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            // Генерация уникального имени файла
+            $fileName = rand(1, 100000). '_' . $file->getClientOriginalName();
+//            dd($fileName);
+            try {
+                // Загрузка файла в S3
+                $path = Storage::disk('s3')->putFileAs('question_pictures', $file, $fileName);
+                // Получение URL загруженного файла
+                $fileUrl = Storage::disk('s3')->url($path);
+            }
+            catch (Exception $e){
+                return response()->json(['message' => 'Error uploading file to S3: ',
+                    'error' => ['code' => $e->getCode(), 'message'=> $e->getMessage()]], 500);
+            };
+        }
+        $question = new Question([
+            'user_id' => $user->id,
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'picture_url' => $fileUrl,
+        ]);
+        $question->save();
+        return response()->json([
+            'code' => 0,
+            'message' => 'Вопрос успешно добавлен',
+        ], 201);
     }
 
     /**

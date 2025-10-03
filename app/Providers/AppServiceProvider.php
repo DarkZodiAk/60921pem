@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         Paginator::defaultView('pagination::default');
 
         Gate::define('delete-question', function (User $user, Question $question) {

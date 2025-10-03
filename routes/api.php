@@ -26,7 +26,8 @@ Route::get('/questions_total', [QuestionControllerApi::class, 'total']);
 Route::get('/tag/{id}', [TagControllerApi::class, 'show']);
 Route::get('/tags_total', [TagControllerApi::class, 'total']);
 
-Route::group(['middleware' => ['auth:sanctum']],  function (){
+Route::group(['middleware' => ['auth:sanctum']],  function () {
+    Route::post('/question', [QuestionControllerApi::class, 'store']);
     Route::get('/tag', [TagControllerApi::class, 'index']);
     Route::get('/user', function (Request $request) {
         return $request->user();
