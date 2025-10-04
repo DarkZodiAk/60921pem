@@ -34,6 +34,8 @@ class QuestionControllerApi extends Controller
             'title' => 'required|string',
             'content' => 'string',
             'image' => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'tags' => 'array',
+            'tags.*' => 'integer|exists:tags,id',
         ]);
 
         $user = $request->user();
@@ -44,7 +46,6 @@ class QuestionControllerApi extends Controller
             $file = $request->file('image');
             // Генерация уникального имени файла
             $fileName = rand(1, 100000). '_' . $file->getClientOriginalName();
-//            dd($fileName);
             try {
                 // Загрузка файла в S3
                 $path = Storage::disk('s3')->putFileAs('question_pictures', $file, $fileName);
@@ -63,6 +64,7 @@ class QuestionControllerApi extends Controller
             'picture_url' => $fileUrl,
         ]);
         $question->save();
+        $question->tags()->attach($validated['tags']);
         return response()->json([
             'code' => 0,
             'message' => 'Вопрос успешно добавлен',
