@@ -64,7 +64,9 @@ class QuestionControllerApi extends Controller
             'picture_url' => $fileUrl,
         ]);
         $question->save();
-        $question->tags()->attach($validated['tags']);
+        if ($request->has('tags')) {
+            $question->tags()->attach($validated['tags']);
+        }
         return response()->json([
             'code' => 0,
             'message' => 'Вопрос успешно добавлен',
