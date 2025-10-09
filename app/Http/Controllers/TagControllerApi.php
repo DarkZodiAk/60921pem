@@ -22,6 +22,11 @@ class TagControllerApi extends Controller
         return response(Tag::all()->count());
     }
 
+    public function all()
+    {
+        return response(Tag::all());
+    }
+
     /**
      * Store a newly created resource in storage.
      */

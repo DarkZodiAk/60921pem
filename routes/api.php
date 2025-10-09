@@ -23,6 +23,8 @@ Route::get('/question', [QuestionControllerApi::class, 'index']);
 Route::get('/question/{id}', [QuestionControllerApi::class, 'show']);
 Route::get('/questions_total', [QuestionControllerApi::class, 'total']);
 
+Route::get('/tag', [TagControllerApi::class, 'index']);
+Route::get('/tags_all', [TagControllerApi::class, 'all']);
 Route::get('/tag/{id}', [TagControllerApi::class, 'show']);
 Route::get('/tags_total', [TagControllerApi::class, 'total']);
 
