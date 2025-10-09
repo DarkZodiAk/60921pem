@@ -17,7 +17,12 @@ class QuestionControllerApi extends Controller
     {
         $perpage = $request->perpage ?? 5;
         $page = $request->page ?? 0;
-        return response(Question::limit($perpage)->offset($perpage * $page)->get());
+        return response(
+            Question::limit($perpage)
+                ->offset($perpage * $page)
+                ->with('tags:id,name')
+                ->get()
+        );
     }
 
     public function total()
@@ -78,7 +83,7 @@ class QuestionControllerApi extends Controller
      */
     public function show(string $id)
     {
-        return response(Question::all()->where('id', $id)->first());
+        return response(Question::all()->where('id', $id)->with('tags:id,name')->first());
     }
 
     /**
