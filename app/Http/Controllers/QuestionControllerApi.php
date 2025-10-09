@@ -83,7 +83,7 @@ class QuestionControllerApi extends Controller
      */
     public function show(string $id)
     {
-        return response(Question::all()->where('id', $id)->with('tags:id,name')->first());
+        return response(Question::with('tags:id,name')->findOrFail($id));
     }
 
     /**
